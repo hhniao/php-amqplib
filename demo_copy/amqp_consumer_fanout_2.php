@@ -21,8 +21,7 @@ $channel = $connection->channel();
     exclusive: false // the queue might be accessed by other channels
     auto_delete: true //the queue will be deleted once the channel is closed.
 */
-$channel->queue_declare($queue, false, false, false, true);
-
+$channel->queue_declare($queue, false, true, false, false);
 /*
     name: $exchange
     type: direct
@@ -31,7 +30,7 @@ $channel->queue_declare($queue, false, false, false, true);
     auto_delete: true //the exchange will be deleted once the channel is closed.
 */
 
-$channel->exchange_declare($exchange, AMQPExchangeType::FANOUT, false, false, true);
+$channel->exchange_declare($exchange, AMQPExchangeType::FANOUT, false, true, false);
 
 $channel->queue_bind($queue, $exchange);
 

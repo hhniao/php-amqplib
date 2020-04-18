@@ -21,7 +21,7 @@ $channel = $connection->channel();
     exclusive: false // the queue might be accessed by other channels
     auto_delete: true //the queue will be deleted once the channel is closed.
 */
-$channel->queue_declare($queue, false, false, false, true);
+$channel->queue_declare($queue, false, true, false, false);
 
 /*
     name: $exchange
@@ -31,7 +31,7 @@ $channel->queue_declare($queue, false, false, false, true);
     auto_delete: true //the exchange will be deleted once the channel is closed.
 */
 
-$channel->exchange_declare($exchange, AMQPExchangeType::FANOUT, false, false, true);
+$channel->exchange_declare($exchange, AMQPExchangeType::FANOUT, false, true, false);
 
 $channel->queue_bind($queue, $exchange);
 
@@ -40,9 +40,7 @@ $channel->queue_bind($queue, $exchange);
  */
 function process_message($message)
 {
-    echo "\n--------\n";
-    echo $message->body;
-    echo "\n--------\n";
+    echo $message->body,"\n";
 
     $message->delivery_info['channel']->basic_ack($message->delivery_info['delivery_tag']);
 
@@ -63,7 +61,7 @@ function process_message($message)
     callback: A PHP Callback
 */
 
-$channel->basic_consume($queue, $consumerTag, false, false, false, false, 'process_message');
+$channel->basic_consume($queue, $consumerTag, false, false, true, false, 'process_message');
 
 /**
  * @param \PhpAmqpLib\Channel\AMQPChannel $channel
